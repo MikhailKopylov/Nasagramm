@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+<style name="EditTextStyle">
+    <item name="hintTextColor">@android:color/holo_green_dark</item>
+    <item name="errorTextColor">@android:color/holo_orange_dark</item>
+    <item name="boxBackgroundColor">@android:color/darker_gray</item>
+    <item name="counterEnabled">true</item>
+    <item name="boxCornerRadiusTopStart">10dp</item>
+</style>
 </resources>
