@@ -1,12 +1,8 @@
-/*
- * Nasagramm
- * Copyright © 2021 AMK.
- */
-
 package com.amk.nasagramm
 
-
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.widget.Toast
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -25,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                add(R.id.fragment_container, DailyImageFragment.newInstance())
+                add(R.id.fragment_container, DailyImageFragment())
             }
         }
         setBottomAppBar()
