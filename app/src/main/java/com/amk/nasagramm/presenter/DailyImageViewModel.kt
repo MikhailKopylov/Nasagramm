@@ -50,11 +50,9 @@ class DailyImageViewModel(
     }
 
     private fun handleImageResponse(response: Response<NasaResponse>) {
-        if (response.isSuccessful) {
-            response.body()?.let {
-                liveDataForView.value = ResponseResult.Success(it)
-                return
-            }
+        if (response.isSuccessful && response.body() != null) {
+            liveDataForView.value = ResponseResult.Success(response.body()!!)
+            return
         }
         val message = response.message()
         if (message.isNullOrEmpty()) {

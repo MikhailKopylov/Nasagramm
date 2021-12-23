@@ -48,10 +48,10 @@ class DailyImageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        dailyImageView = view.findViewById(R.id.daily_image)
-        descriptionTextView = view.findViewById(R.id.bottom_sheet_description)
-        titleTextView = view.findViewById(R.id.bottom_sheet_description_header)
-        isHdChip = view.findViewById(R.id.select_hd_chip)
+        dailyImageView = view.findViewById(R.id.image_view_daily_image)
+        descriptionTextView = view.findViewById(R.id.text_view_bottom_sheet_description)
+        titleTextView = view.findViewById(R.id.text_view_bottom_sheet_description_header)
+        isHdChip = view.findViewById(R.id.chip_select_hd)
         isHdChip.setOnClickListener {
             viewModel.updateData()
         }
@@ -84,17 +84,12 @@ class DailyImageFragment : Fragment() {
         }
     }
 
-    private fun showImage(url: String) = dailyImageView.load(url) {
-        lifecycle(this@DailyImageFragment)
-        error(R.drawable.ic_broken_image)
-        placeholder(R.drawable.ic_no_image)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            DailyImageFragment()
+    private fun showImage(url: String) {
+        dailyImageView.load(url) {
+            lifecycle(this@DailyImageFragment)
+            error(R.drawable.ic_broken_image)
+            placeholder(R.drawable.ic_no_image)
+        }
     }
 
     private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {

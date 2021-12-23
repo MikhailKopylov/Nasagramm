@@ -1,10 +1,4 @@
-/*
- * Nasagramm
- * Copyright © 2021 AMK.
- */
-
 package com.amk.nasagramm
-
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                add(R.id.fragment_image_daily, DailyImageFragment.newInstance())
+                add(R.id.fragment_image_daily, DailyImageFragment())
             }
         }
     }
