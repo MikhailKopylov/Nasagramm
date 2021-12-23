@@ -1,8 +1,3 @@
-/*
- * Nasagramm
- * Copyright © 2021 AMK.
- */
-
 package com.amk.nasagramm.core
 
 data class NasaResponse(

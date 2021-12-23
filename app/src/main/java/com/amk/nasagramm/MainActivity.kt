@@ -1,8 +1,6 @@
 package com.amk.nasagramm
 
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.widget.Toast
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -33,7 +31,6 @@ class MainActivity : AppCompatActivity() {
             else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)

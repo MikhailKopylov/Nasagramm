@@ -1,8 +1,3 @@
-/*
- * Nasagramm
- * Copyright © 2021 AMK.
- */
-
 package com.amk.nasagramm.presenter
 
 import androidx.lifecycle.LiveData
@@ -65,6 +60,5 @@ class DailyImageViewModel(
         } else {
             liveDataForView.value = ResponseResult.Error(Throwable(message))
         }
-
     }
 }
