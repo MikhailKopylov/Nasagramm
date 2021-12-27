@@ -59,7 +59,7 @@ class DailyImageFragment : Fragment() {
     private fun renderData(responseResult: ResponseResult) {
         when (responseResult) {
             is ResponseResult.Success -> {
-                val responseData = responseResult.serviceResponseData
+                val responseData = responseResult.serviceEveryDayPhotoData
                 val url = if (isHdChip.isChecked) {
                     responseData.hdurl
                 } else {
