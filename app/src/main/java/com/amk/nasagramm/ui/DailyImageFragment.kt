@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.api.load
 import com.amk.nasagramm.R
-import com.amk.nasagramm.core.ResponseResult
+import com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse
+import com.amk.nasagramm.domain.DailyImage
 import com.amk.nasagramm.presenter.DailyImageViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -56,29 +57,33 @@ class DailyImageFragment : Fragment() {
         setBottomSheetBehavior(view.findViewById(R.id.description_bottom_sheet))
     }
 
-    private fun renderData(responseResult: ResponseResult) {
-        when (responseResult) {
-            is ResponseResult.Success -> {
-                val responseData = responseResult.serviceEveryDayPhotoData
+    private fun renderData(dailyImage: DailyImage) {
+        when (dailyImage) {
+            is DailyImage.Success -> {
+                val responseData = dailyImage.dailyImageResponse
                 val url = if (isHdChip.isChecked) {
                     responseData.hdurl
                 } else {
                     responseData.url
                 }
-                url?.let {
-                    if (it.isNotEmpty()) {
-                        showImage(it)
-                    } else {
-                        dailyImageView.load(R.drawable.ic_no_image)
-                    }
-                } ?: dailyImageView.load(R.drawable.ic_broken_image)
-                responseData.explanation?.let { descriptionTextView.text = it }
-                responseData.title?.let { titleTextView.text = it }
+                loadImage(url, responseData)
             }
-            is ResponseResult.LoadingInProgress -> {}//TODO()
-            is ResponseResult.Error -> {}//TODO()
-            is ResponseResult.LoadingStopped -> {}//TODO()
+            is DailyImage.LoadingInProgress -> {}//TODO()
+            is DailyImage.Error -> {}//TODO()
+            is DailyImage.LoadingStopped -> {}//TODO()
         }
+    }
+
+    private fun loadImage(url: String?, responseData: DailyImageResponse) {
+        url?.let {
+            if (it.isNotEmpty()) {
+                showImage(it)
+            } else {
+                dailyImageView.load(R.drawable.ic_no_image)
+            }
+        } ?: dailyImageView.load(R.drawable.ic_broken_image)
+        responseData.explanation?.let { descriptionTextView.text = it }
+        responseData.title?.let { titleTextView.text = it }
     }
 
     private fun showImage(url: String) {

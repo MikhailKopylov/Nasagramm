@@ -1,6 +1,6 @@
-package com.amk.nasagramm.core
+package com.amk.nasagramm.data.everyDayPhoto
 
-data class NasaEveryDayPhoto(
+data class DailyImageResponse(
     val date: String?,
     val explanation: String?,
     val hdurl: String?,
