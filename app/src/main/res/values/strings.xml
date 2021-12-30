@@ -14,5 +14,9 @@
 
     <!-- Messages Preferences -->
     <string name="black_themes">Темная тема</string>
+    <string name="night_theme">Ночная тема</string>
+    <string name="off">Выключена</string>
+    <string name="on">Включена</string>
+    <string name="system">Системная</string>
 
 </resources>
