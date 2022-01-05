@@ -18,5 +18,8 @@
     <string name="off">Выключена</string>
     <string name="on">Включена</string>
     <string name="system">Системная</string>
+    <string name="mars">Марс</string>
+    <string name="day_photo">Фото дня</string>
+
 
 </resources>

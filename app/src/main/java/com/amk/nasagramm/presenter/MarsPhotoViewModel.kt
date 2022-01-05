@@ -7,11 +7,15 @@ import com.amk.nasagramm.BuildConfig
 import com.amk.nasagramm.data.NasaApiRetrofit
 import com.amk.nasagramm.data.marsPhoto.MarsPhotoResponse
 import com.amk.nasagramm.data.marsPhoto.RoversName
+import com.amk.nasagramm.data.marsPhoto.manifest.Manifest
+import com.amk.nasagramm.data.marsPhoto.manifest.Photo
 import com.amk.nasagramm.domain.DailyImage
 import com.amk.nasagramm.domain.MarsPhoto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
+private const val DEFAULT_DAY_ON_MARS = 1
 
 class MarsPhotoViewModel(
     private val liveDataForView: MutableLiveData<MarsPhoto> = MutableLiveData(),
@@ -19,6 +23,9 @@ class MarsPhotoViewModel(
 ) : ViewModel() {
 
     private var roversName: RoversName = RoversName.Curiosity
+    private var photoList = mutableListOf<Photo>()
+    private var dayOnMars = DEFAULT_DAY_ON_MARS
+    private lateinit var apiKey: String
 
     fun getData(roversName: RoversName): LiveData<MarsPhoto> {
         this.roversName = roversName
@@ -26,18 +33,40 @@ class MarsPhotoViewModel(
         return liveDataForView
     }
 
+    fun randomDate() {
+        dayOnMars = photoList.randomOrNull()?.sol ?: DEFAULT_DAY_ON_MARS
+        executeRequest()
+    }
+
     private fun sendServerRequest() {
         liveDataForView.value = MarsPhoto.LoadingStopped
 
-        val apiKey = BuildConfig.NASA_API_KEY
+        apiKey = BuildConfig.NASA_API_KEY
         if (apiKey.isBlank()) {
             DailyImage.Error(Throwable("We need your api key"))
         } else {
-            executeRequest(apiKey)
+            initMaxDayOnMars()
         }
     }
 
-    private fun executeRequest(apiKey: String) {
+    private fun initMaxDayOnMars() {
+        val callback = object : Callback<Manifest> {
+            override fun onResponse(call: Call<Manifest>, response: Response<Manifest>) {
+                if (response.isSuccessful && response.body() != null) {
+                    photoList.addAll(response.body()?.photo_manifest?.photos ?: listOf())
+                    dayOnMars = photoList.randomOrNull()?.sol ?: DEFAULT_DAY_ON_MARS
+                    executeRequest()
+                }
+            }
+
+            override fun onFailure(call: Call<Manifest>, t: Throwable) {
+                executeRequest()
+            }
+        }
+        retrofitImpl.getNasaService().getMarsPhotoManifest(roversName, apiKey).enqueue(callback)
+    }
+
+    private fun executeRequest() {
         val callBack = object : Callback<MarsPhotoResponse> {
             override fun onResponse(
                 call: Call<MarsPhotoResponse>,
@@ -50,7 +79,7 @@ class MarsPhotoViewModel(
                 liveDataForView.value = MarsPhoto.Error(t)
             }
         }
-        retrofitImpl.getNasaService().getMarsPhoto(roversName, apiKey).enqueue(callBack)
+        retrofitImpl.getNasaService().getMarsPhoto(roversName, dayOnMars, apiKey).enqueue(callBack)
     }
 
     private fun handleImageResponse(marsPhotoResponse: Response<MarsPhotoResponse>) {

@@ -1,5 +1,6 @@
 package com.amk.nasagramm.ui.marsPhoto
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,10 @@ class MarsPhotoFragment : Fragment() {
     private val viewModel by viewModels<MarsPhotoViewModel>()
     private lateinit var marsPhotoImageView: ImageView
     private lateinit var roverNameTextView: TextView
+    private lateinit var marsDateTextView: TextView
+    private lateinit var earthDateTextView: TextView
+    private lateinit var caneraNameTextView: TextView
+    private lateinit var fab: View
     private val roversName by lazy {
         requireArguments().getSerializable(ROVERS_NAME) as RoversName
     }
@@ -44,13 +49,27 @@ class MarsPhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         marsPhotoImageView = view.findViewById(R.id.image_view_mars_photo)
         roverNameTextView = view.findViewById(R.id.text_view_rover_name)
+        marsDateTextView = view.findViewById(R.id.text_view_mars_date)
+        earthDateTextView = view.findViewById(R.id.text_view_earth_date)
+        caneraNameTextView = view.findViewById(R.id.text_view_camera_name)
+        fab = view.findViewById(R.id.fab_random_date)
+        fab.setOnClickListener {
+            viewModel.randomDate()
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun renderData(marsPhoto: MarsPhoto) {
         when (marsPhoto) {
             is MarsPhoto.Success -> {
                 val response = marsPhoto.marsPhotoResponse
                 roverNameTextView.text = marsPhoto.marsPhotoResponse.photos[0].rover?.name ?: ""
+                val dayOnMars = marsPhoto.marsPhotoResponse.photos[0].sol?.toString() ?: ""
+                val dateOnEarth = marsPhoto.marsPhotoResponse.photos[0].earth_date ?: ""
+                val cameraName = marsPhoto.marsPhotoResponse.photos[0].camera?.full_name ?: ""
+                marsDateTextView.text = "$dayOnMars-й день на Марсе"
+                earthDateTextView.text = "Дата на Земле: $dateOnEarth"
+                caneraNameTextView.text = "Снято камерой: $cameraName"
                 loadImage(response)
             }
             is MarsPhoto.LoadingInProgress -> {}//TODO()
@@ -63,11 +82,21 @@ class MarsPhotoFragment : Fragment() {
         val url = response.photos[0].img_src
         url?.let {
             if (it.isNotEmpty()) {
-                showImage(it)
+                val safetyUrl = checkUrl(it)
+                showImage(safetyUrl)
             } else {
                 marsPhotoImageView.load(R.drawable.ic_no_image)
             }
         } ?: marsPhotoImageView.load(R.drawable.ic_broken_image)
+    }
+
+    private fun checkUrl(url: String): String {
+        url.elementAtOrNull(4)?.let {
+            if (it != 's') {
+                return StringBuilder(url).apply { insert(4, 's') }.toString()
+            }
+        }
+        return url
     }
 
     private fun showImage(url: String) {
