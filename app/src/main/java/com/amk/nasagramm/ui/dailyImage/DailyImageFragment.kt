@@ -1,32 +1,40 @@
-package com.amk.nasagramm.ui
+package com.amk.nasagramm.ui.dailyImage
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import coil.api.load
+import com.amk.nasagramm.MainActivity
 import com.amk.nasagramm.R
 import com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse
 import com.amk.nasagramm.domain.DailyImage
 import com.amk.nasagramm.presenter.DailyImageViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
+import javax.inject.Inject
 
 private const val ARG_PARAM1 = "param1"
 
-
 class DailyImageFragment : Fragment() {
 
-    private val viewModel by viewModels<DailyImageViewModel>()
+    @Inject
+    lateinit var viewModel: DailyImageViewModel
+
     private lateinit var dailyImageView: ImageView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private lateinit var titleTextView: TextView
     private lateinit var descriptionTextView: TextView
     private lateinit var isHdChip: Chip
     private var param1: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).component.injectDailyImageFragment(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,9 +76,12 @@ class DailyImageFragment : Fragment() {
                 }
                 loadImage(url, responseData)
             }
-            is DailyImage.LoadingInProgress -> {}//TODO()
-            is DailyImage.Error -> {}//TODO()
-            is DailyImage.LoadingStopped -> {}//TODO()
+            is DailyImage.LoadingInProgress -> {
+            }//TODO()
+            is DailyImage.Error -> {
+            }//TODO()
+            is DailyImage.LoadingStopped -> {
+            }//TODO()
         }
     }
 

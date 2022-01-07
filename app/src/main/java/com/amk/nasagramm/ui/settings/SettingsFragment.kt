@@ -1,4 +1,4 @@
-package com.amk.nasagramm
+package com.amk.nasagramm.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.amk.nasagramm.R
 import com.amk.nasagramm.ui.SettingManager
 import com.amk.nasagramm.ui.Theme
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -32,6 +33,9 @@ class SettingsFragment : Fragment() {
             Theme.System -> textViewThemeStatus.text = "Системная"
         }
         textViewThemeHeader.setOnClickListener {
+            selectThemeDialog(view)
+        }
+        textViewThemeStatus.setOnClickListener {
             selectThemeDialog(view)
         }
     }

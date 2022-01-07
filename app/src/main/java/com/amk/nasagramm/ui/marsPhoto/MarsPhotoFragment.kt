@@ -1,6 +1,7 @@
 package com.amk.nasagramm.ui.marsPhoto
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,19 +9,22 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import coil.api.load
+import com.amk.nasagramm.MainActivity
 import com.amk.nasagramm.R
 import com.amk.nasagramm.data.marsPhoto.MarsPhotoResponse
 import com.amk.nasagramm.data.marsPhoto.RoversName
 import com.amk.nasagramm.domain.MarsPhoto
 import com.amk.nasagramm.presenter.MarsPhotoViewModel
+import javax.inject.Inject
 
 private const val ROVERS_NAME = "roversName"
 
 class MarsPhotoFragment : Fragment() {
 
-    private val viewModel by viewModels<MarsPhotoViewModel>()
+    @Inject
+    lateinit var viewModel: MarsPhotoViewModel
+
     private lateinit var marsPhotoImageView: ImageView
     private lateinit var roverNameTextView: TextView
     private lateinit var marsDateTextView: TextView
@@ -29,6 +33,11 @@ class MarsPhotoFragment : Fragment() {
     private lateinit var fab: View
     private val roversName by lazy {
         requireArguments().getSerializable(ROVERS_NAME) as RoversName
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).component.injectMarsPhotoFragment(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,9 +81,12 @@ class MarsPhotoFragment : Fragment() {
                 caneraNameTextView.text = "Снято камерой: $cameraName"
                 loadImage(response)
             }
-            is MarsPhoto.LoadingInProgress -> {}//TODO()
-            is MarsPhoto.Error -> {}//TODO()
-            is MarsPhoto.LoadingStopped -> {}//TODO()
+            is MarsPhoto.LoadingInProgress -> {
+            }//TODO()
+            is MarsPhoto.Error -> {
+            }//TODO()
+            is MarsPhoto.LoadingStopped -> {
+            }//TODO()
         }
     }
 

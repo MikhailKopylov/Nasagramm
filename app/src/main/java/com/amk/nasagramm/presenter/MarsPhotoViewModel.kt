@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.nasagramm.BuildConfig
-import com.amk.nasagramm.data.NasaApiRetrofit
+import com.amk.nasagramm.data.NasaApiService
 import com.amk.nasagramm.data.marsPhoto.MarsPhotoResponse
 import com.amk.nasagramm.data.marsPhoto.RoversName
 import com.amk.nasagramm.data.marsPhoto.manifest.Manifest
@@ -14,12 +14,13 @@ import com.amk.nasagramm.domain.MarsPhoto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
 private const val DEFAULT_DAY_ON_MARS = 1
 
-class MarsPhotoViewModel(
-    private val liveDataForView: MutableLiveData<MarsPhoto> = MutableLiveData(),
-    private val retrofitImpl: NasaApiRetrofit = NasaApiRetrofit(),
+class MarsPhotoViewModel @Inject constructor(
+    private val nasaApiService: NasaApiService,
+    private val liveDataForView: MutableLiveData<MarsPhoto>,
 ) : ViewModel() {
 
     private var roversName: RoversName = RoversName.Curiosity
@@ -63,7 +64,7 @@ class MarsPhotoViewModel(
                 executeRequest()
             }
         }
-        retrofitImpl.getNasaService().getMarsPhotoManifest(roversName, apiKey).enqueue(callback)
+        nasaApiService.getMarsPhotoManifest(roversName, apiKey).enqueue(callback)
     }
 
     private fun executeRequest() {
@@ -79,7 +80,7 @@ class MarsPhotoViewModel(
                 liveDataForView.value = MarsPhoto.Error(t)
             }
         }
-        retrofitImpl.getNasaService().getMarsPhoto(roversName, dayOnMars, apiKey).enqueue(callBack)
+        nasaApiService.getMarsPhoto(roversName, dayOnMars, apiKey).enqueue(callBack)
     }
 
     private fun handleImageResponse(marsPhotoResponse: Response<MarsPhotoResponse>) {

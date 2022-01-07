@@ -4,15 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.nasagramm.BuildConfig
-import com.amk.nasagramm.data.NasaApiRetrofit
+import com.amk.nasagramm.data.NasaApiService
 import com.amk.nasagramm.domain.DailyImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class DailyImageViewModel(
-    private val liveDataForView: MutableLiveData<DailyImage> = MutableLiveData(),
-    private val retrofitImpl: NasaApiRetrofit = NasaApiRetrofit(),
+class DailyImageViewModel @Inject constructor(
+    private val nasaApiService: NasaApiService,
+    private val liveDataForView: MutableLiveData<DailyImage>,
 ) : ViewModel() {
 
     fun getImageData(): LiveData<DailyImage> {
@@ -44,11 +45,14 @@ class DailyImageViewModel(
                 handleImageResponse(dailyImageResponse)
             }
 
-            override fun onFailure(call: Call<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>, t: Throwable) {
+            override fun onFailure(
+                call: Call<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>,
+                t: Throwable
+            ) {
                 liveDataForView.value = DailyImage.Error(t)
             }
         }
-        retrofitImpl.getNasaService().getEveryDayPhoto(apiKey).enqueue(callBack)
+        nasaApiService.getEveryDayPhoto(apiKey).enqueue(callBack)
     }
 
     private fun handleImageResponse(dailyImageResponse: Response<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>) {
