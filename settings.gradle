@@ -8,3 +8,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Nasagramm"
 include ':app'
+include ':core'
+include ':feature'
+include ':feature:daily_image'
+include ':feature:mars_photo'
+include ':feature:settings'
