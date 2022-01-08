@@ -1,16 +1,31 @@
 package com.amk.nasagramm.di
 
-import com.amk.nasagramm.MainActivity
-import com.amk.nasagramm.ui.dailyImage.DailyImageFragment
-import com.amk.nasagramm.ui.marsPhoto.MarsPhotoFragment
+import android.content.Context
+import dagger.BindsInstance
 import dagger.Component
+import ru.amk.core.di.AppProvider
 import javax.inject.Singleton
 
-@Component(modules = [RetrofitModule::class, ViewModelModule::class])
+@Component
 @Singleton
-interface AppComponent {
+interface AppComponent : AppProvider {
 
-    fun injectMainActivity(mainActivity: MainActivity)
-    fun injectDailyImageFragment(dailyImageFragment: DailyImageFragment)
-    fun injectMarsPhotoFragment(marsPhotoFragment: MarsPhotoFragment)
+    @Component.Builder
+    interface AppComponentBuilder {
+
+        fun build(): AppComponent
+
+        @BindsInstance
+        fun context(context: Context): AppComponentBuilder
+    }
+
+    companion object {
+        private var appProvider: AppProvider? = null
+        fun createAppComponent(context: Context): AppProvider =
+            appProvider
+                ?: DaggerAppComponent
+                    .builder()
+                    .context(context)
+                    .build()
+    }
 }

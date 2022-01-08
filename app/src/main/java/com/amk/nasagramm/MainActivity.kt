@@ -3,19 +3,12 @@ package com.amk.nasagramm
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
-import com.amk.nasagramm.di.AppComponent
-import com.amk.nasagramm.ui.FactoryFragment
-import com.amk.nasagramm.ui.FragmentType
-import com.amk.nasagramm.ui.dailyImage.DailyImageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ru.amk.dayli_image.ui.DailyImageFragment
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var component: AppComponent
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        component = (application as App).appComponent
-        component.injectMainActivity(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
