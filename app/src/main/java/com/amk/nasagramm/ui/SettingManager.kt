@@ -26,5 +26,7 @@ class SettingManager(
         }
     }
 
-    fun getTheme(): Theme = Theme.values()[preferences.getInt(THEME, Theme.System.ordinal)]
+    fun getTheme(): Theme {
+        return Theme.values()[preferences.getInt(THEME, Theme.System.ordinal)]
+    }
 }

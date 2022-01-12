@@ -17,7 +17,11 @@ class SettingsFragment : Fragment() {
     private lateinit var textViewThemeHeader: TextView
     private lateinit var dialogSelectTheme: BottomSheetDialog
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
@@ -42,16 +46,19 @@ class SettingsFragment : Fragment() {
         dialogSelectTheme.show()
 
         val textViewSelectDay = dialogSelectTheme.findViewById<TextView>(R.id.text_view_off)
+            ?: throw NoSuchElementException()
         val textViewSelectNight = dialogSelectTheme.findViewById<TextView>(R.id.text_view_on)
+            ?: throw NoSuchElementException()
         val textViewSelectSystem = dialogSelectTheme.findViewById<TextView>(R.id.text_view_system)
+            ?: throw NoSuchElementException()
 
-        textViewSelectDay?.setOnClickListener {
+        textViewSelectDay.setOnClickListener {
             saveTheme(Theme.Day)
         }
-        textViewSelectNight?.setOnClickListener {
+        textViewSelectNight.setOnClickListener {
             saveTheme(Theme.Night)
         }
-        textViewSelectSystem?.setOnClickListener {
+        textViewSelectSystem.setOnClickListener {
             saveTheme(Theme.System)
         }
     }
