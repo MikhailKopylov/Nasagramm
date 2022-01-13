@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -56,13 +54,12 @@ class DailyImageFragment : Fragment() {
             viewModel.updateData()
         }
         setBottomSheetBehavior(view.findViewById(R.id.description_bottom_sheet))
-        setBottomAppBar(view)
     }
 
     private fun renderData(responseResult: ResponseResult) {
         when (responseResult) {
             is ResponseResult.Success -> {
-                val responseData = responseResult.serviceResponseData
+                val responseData = responseResult.serviceEveryDayPhotoData
                 val url = if (isHdChip.isChecked) {
                     responseData.hdurl
                 } else {
@@ -95,25 +92,6 @@ class DailyImageFragment : Fragment() {
     private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_bottom_bar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.app_bar_fav -> Toast.makeText(context, "Favourite", Toast.LENGTH_SHORT).show()
-            R.id.app_bar_search -> Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun setBottomAppBar(view: View) {
-        val context = requireContext() as AppCompatActivity
-        context.setSupportActionBar(view.findViewById(R.id.bottom_app_bar))
-        setHasOptionsMenu(true)
     }
 }
 

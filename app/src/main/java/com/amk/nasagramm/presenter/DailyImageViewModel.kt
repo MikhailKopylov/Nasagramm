@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.nasagramm.BuildConfig
 import com.amk.nasagramm.core.NasaApiRetrofit
-import com.amk.nasagramm.core.NasaResponse
+import com.amk.nasagramm.core.NasaEveryDayPhoto
 import com.amk.nasagramm.core.ResponseResult
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,29 +37,28 @@ class DailyImageViewModel(
     }
 
     private fun executeImageRequest(apiKey: String) {
-        val callBack = object : Callback<NasaResponse> {
-            override fun onResponse(call: Call<NasaResponse>, response: Response<NasaResponse>) {
-                handleImageResponse(response)
+        val callBack = object : Callback<NasaEveryDayPhoto> {
+            override fun onResponse(call: Call<NasaEveryDayPhoto>, everyDayPhoto: Response<NasaEveryDayPhoto>) {
+                handleImageResponse(everyDayPhoto)
             }
 
-            override fun onFailure(call: Call<NasaResponse>, t: Throwable) {
+            override fun onFailure(call: Call<NasaEveryDayPhoto>, t: Throwable) {
                 liveDataForView.value = ResponseResult.Error(t)
             }
         }
         retrofitImpl.getNasaService().getImage(apiKey).enqueue(callBack)
     }
 
-    private fun handleImageResponse(response: Response<NasaResponse>) {
-        if (response.isSuccessful && response.body() != null) {
-            liveDataForView.value = ResponseResult.Success(response.body()!!)
+    private fun handleImageResponse(everyDayPhoto: Response<NasaEveryDayPhoto>) {
+        if (everyDayPhoto.isSuccessful && everyDayPhoto.body() != null) {
+            liveDataForView.value = ResponseResult.Success(everyDayPhoto.body()!!)
             return
         }
-        val message = response.message()
+        val message = everyDayPhoto.message()
         if (message.isNullOrEmpty()) {
             liveDataForView.value = ResponseResult.Error(Throwable("Unidentified error"))
         } else {
             liveDataForView.value = ResponseResult.Error(Throwable(message))
         }
-
     }
 }

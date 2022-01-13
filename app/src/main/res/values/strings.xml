@@ -6,5 +6,17 @@
     <string name="wiki_helper_text">Помощь</string>
     <string name="hd">HD</string>
     <string name="favourite">Избранное</string>
+    <string name="home">Домой</string>
     <string name="settings">Настройки</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Настройки</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="black_themes">Темная тема</string>
+    <string name="night_theme">Ночная тема</string>
+    <string name="off">Выключена</string>
+    <string name="on">Включена</string>
+    <string name="system">Системная</string>
+
 </resources>

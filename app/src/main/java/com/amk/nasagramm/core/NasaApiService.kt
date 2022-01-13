@@ -6,5 +6,5 @@ import retrofit2.http.Query
 
 interface NasaApiService {
     @GET("planetary/apod")
-    fun getImage(@Query("api_key") apiKey: String): Call<NasaResponse>
+    fun getImage(@Query("api_key") apiKey: String): Call<NasaEveryDayPhoto>
 }
