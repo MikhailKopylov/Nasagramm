@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.motion.widget.MotionLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/fragment_image_daily_scene">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view_daily_image"
@@ -14,7 +15,7 @@
             android:layout_height="0dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_no_image"
-            app:layout_constraintBottom_toTopOf="@+id/text_input_layout_wiki"
+            app:layout_constraintBottom_toBottomOf="@+id/chip_select_hd"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -25,12 +26,8 @@
             style="@style/Widget.MaterialComponents.Chip.Filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_weight="1"
-            android:text="@string/hd"
-            app:layout_constraintBottom_toTopOf="@+id/text_input_layout_wiki"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_view_daily_image" />
+            android:text="@string/hd" />
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_wiki"
@@ -43,10 +40,7 @@
             app:counterMaxLength="20"
             app:endIconMode="password_toggle"
             app:errorIconDrawable="@drawable/ic_broken_image"
-            app:helperText="@string/wiki_helper_text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:helperText="@string/wiki_helper_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/input_edit_text_wiki"
@@ -56,8 +50,15 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_search_wiki"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search" />
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 
     <include layout="@layout/bottom_sheet_description" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
