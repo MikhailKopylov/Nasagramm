@@ -1,5 +1,8 @@
 package ru.amk.core.data.marsPhoto.manifest
 
+import com.google.gson.annotations.SerializedName
+
 data class Manifest(
-    val photo_manifest: PhotoManifest,
+    @SerializedName("photo_manifest")
+    val photoManifest: PhotoManifest,
 )

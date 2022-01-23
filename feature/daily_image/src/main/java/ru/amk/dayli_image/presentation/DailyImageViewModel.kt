@@ -28,7 +28,7 @@ class DailyImageViewModel @Inject constructor(
     private fun sendServerRequest() {
         liveDataForView.value = DailyImage.LoadingStopped
 
-        val apiKey = ApiKey.apiKey
+        val apiKey = BuildConfig.NASA_API_KEY
         if (apiKey.isBlank()) {
             DailyImage.Error(Throwable("We need your api key"))
         } else {
@@ -37,25 +37,22 @@ class DailyImageViewModel @Inject constructor(
     }
 
     private fun executeImageRequest(apiKey: String) {
-        val callBack = object : Callback<ru.amk.core.data.everyDayPhoto.DailyImageResponse> {
+        val callBack = object : Callback<DailyImageResponse> {
             override fun onResponse(
-                call: Call<ru.amk.core.data.everyDayPhoto.DailyImageResponse>,
-                dailyImageResponse: Response<ru.amk.core.data.everyDayPhoto.DailyImageResponse>,
+                call: Call<DailyImageResponse>,
+                dailyImageResponse: Response<DailyImageResponse>,
             ) {
                 handleImageResponse(dailyImageResponse)
             }
 
-            override fun onFailure(
-                call: Call<ru.amk.core.data.everyDayPhoto.DailyImageResponse>,
-                t: Throwable
-            ) {
+            override fun onFailure(call: Call<DailyImageResponse>, t: Throwable) {
                 liveDataForView.value = DailyImage.Error(t)
             }
         }
         nasaApiService.getEveryDayPhoto(apiKey).enqueue(callBack)
     }
 
-    private fun handleImageResponse(dailyImageResponse: Response<ru.amk.core.data.everyDayPhoto.DailyImageResponse>) {
+    private fun handleImageResponse(dailyImageResponse: Response<DailyImageResponse>) {
         if (dailyImageResponse.isSuccessful && dailyImageResponse.body() != null) {
             liveDataForView.value =
                 DailyImage.Success(dailyImageResponse.body()!!)

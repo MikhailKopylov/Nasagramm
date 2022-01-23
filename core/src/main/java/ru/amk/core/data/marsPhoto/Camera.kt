@@ -1,8 +1,12 @@
 package ru.amk.core.data.marsPhoto
 
+import com.google.gson.annotations.SerializedName
+
 data class Camera(
-    val full_name: String,
+    @SerializedName("full_name")
+    val fullName: String,
     val id: Int,
     val name: String,
-    val rover_id: Int
+    @SerializedName("rover_id")
+    val roverId: Int
 )
