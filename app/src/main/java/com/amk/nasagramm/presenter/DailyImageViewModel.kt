@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.nasagramm.BuildConfig
 import com.amk.nasagramm.data.NasaApiRetrofit
+import com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse
 import com.amk.nasagramm.domain.DailyImage
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,22 +37,22 @@ class DailyImageViewModel(
     }
 
     private fun executeImageRequest(apiKey: String) {
-        val callBack = object : Callback<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse> {
+        val callBack = object : Callback<DailyImageResponse> {
             override fun onResponse(
-                call: Call<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>,
-                dailyImageResponse: Response<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>,
+                call: Call<DailyImageResponse>,
+                dailyImageResponse: Response<DailyImageResponse>,
             ) {
                 handleImageResponse(dailyImageResponse)
             }
 
-            override fun onFailure(call: Call<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DailyImageResponse>, t: Throwable) {
                 liveDataForView.value = DailyImage.Error(t)
             }
         }
         retrofitImpl.getNasaService().getEveryDayPhoto(apiKey).enqueue(callBack)
     }
 
-    private fun handleImageResponse(dailyImageResponse: Response<com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse>) {
+    private fun handleImageResponse(dailyImageResponse: Response<DailyImageResponse>) {
         if (dailyImageResponse.isSuccessful && dailyImageResponse.body() != null) {
             liveDataForView.value = DailyImage.Success(dailyImageResponse.body()!!)
             return

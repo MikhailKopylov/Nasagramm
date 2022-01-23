@@ -65,8 +65,8 @@ class MarsPhotoFragment : Fragment() {
                 val response = marsPhoto.marsPhotoResponse
                 roverNameTextView.text = marsPhoto.marsPhotoResponse.photos[0].rover?.name ?: ""
                 val dayOnMars = marsPhoto.marsPhotoResponse.photos[0].sol?.toString() ?: ""
-                val dateOnEarth = marsPhoto.marsPhotoResponse.photos[0].earth_date ?: ""
-                val cameraName = marsPhoto.marsPhotoResponse.photos[0].camera?.full_name ?: ""
+                val dateOnEarth = marsPhoto.marsPhotoResponse.photos[0].earthDate ?: ""
+                val cameraName = marsPhoto.marsPhotoResponse.photos[0].camera?.fullName ?: ""
                 marsDateTextView.text = "$dayOnMars-й день на Марсе"
                 earthDateTextView.text = "Дата на Земле: $dateOnEarth"
                 caneraNameTextView.text = "Снято камерой: $cameraName"
@@ -79,7 +79,7 @@ class MarsPhotoFragment : Fragment() {
     }
 
     private fun loadImage(response: MarsPhotoResponse) {
-        val url = response.photos[0].img_src
+        val url = response.photos[0].imgSrc
         url?.let {
             if (it.isNotEmpty()) {
                 val safetyUrl = checkUrl(it)

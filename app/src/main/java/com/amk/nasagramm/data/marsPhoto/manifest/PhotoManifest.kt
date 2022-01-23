@@ -1,12 +1,20 @@
 package com.amk.nasagramm.data.marsPhoto.manifest
 
+import com.google.gson.annotations.SerializedName
+
 data class PhotoManifest(
-    val landing_date: String,
-    val launch_date: String,
-    val max_date: String,
-    val max_sol: Int,
+
+    @SerializedName("launch_date")
+    val launchDate: String,
+    @SerializedName("landing_date")
+    val landingDate: String,
+    @SerializedName("max_date")
+    val maxDate: String,
+    @SerializedName("max_sol")
+    val maxSol: Int,
     val name: String,
     val photos: List<Photo>,
     val status: String,
-    val total_photos: Int,
+    @SerializedName("total_photos")
+    val totalPhotos: Int,
 )

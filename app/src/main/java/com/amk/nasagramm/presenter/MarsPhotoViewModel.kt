@@ -53,7 +53,7 @@ class MarsPhotoViewModel(
         val callback = object : Callback<Manifest> {
             override fun onResponse(call: Call<Manifest>, response: Response<Manifest>) {
                 if (response.isSuccessful && response.body() != null) {
-                    photoList.addAll(response.body()?.photo_manifest?.photos ?: listOf())
+                    photoList.addAll(response.body()?.photoManifest?.photos ?: listOf())
                     dayOnMars = photoList.randomOrNull()?.sol ?: DEFAULT_DAY_ON_MARS
                     executeRequest()
                 }
