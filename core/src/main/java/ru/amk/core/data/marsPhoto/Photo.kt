@@ -8,7 +8,7 @@ data class Photo(
     val earthDate: String?,
     val id: Int?,
     @SerializedName("img_src")
-    internal val imgSrc: String?,
+    val imgSrc: String?,
     val rover: Rover?,
     val sol: Int?
 )
