@@ -3,10 +3,16 @@ package com.amk.nasagramm.data.marsPhoto
 import com.google.gson.annotations.SerializedName
 
 data class Camera(
+
     @SerializedName("full_name")
-    val fullName: String,
+    val fullNameCamera: String,
+
+    @SerializedName("id")
     val id: Int,
-    val name: String,
+
+    @SerializedName("name")
+    val nameCamera: String,
+
     @SerializedName("rover_id")
-    val roverId: Int
+    val roverId: Int,
 )

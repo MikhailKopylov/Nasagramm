@@ -30,11 +30,11 @@ class DailyImageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getImageData().observe(this, {
-            renderData(it)
+        viewModel.getImageData().observe(this, { dailyImage ->
+            renderData(dailyImage)
         })
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+        arguments?.let { bundle ->
+            param1 = bundle.getString(ARG_PARAM1)
         }
     }
 
@@ -75,9 +75,9 @@ class DailyImageFragment : Fragment() {
     }
 
     private fun loadImage(url: String?, responseData: DailyImageResponse) {
-        url?.let {
-            if (it.isNotEmpty()) {
-                showImage(it)
+        url?.let { url ->
+            if (url.isNotEmpty()) {
+                showImage(url)
             } else {
                 dailyImageView.load(R.drawable.ic_no_image)
             }

@@ -34,7 +34,7 @@ class MarsPhotoViewModel(
     }
 
     fun randomDate() {
-        dayOnMars = photoList.randomOrNull()?.sol ?: DEFAULT_DAY_ON_MARS
+        dayOnMars = photoList.randomOrNull()?.dayOnMars ?: DEFAULT_DAY_ON_MARS
         executeRequest()
     }
 
@@ -54,7 +54,7 @@ class MarsPhotoViewModel(
             override fun onResponse(call: Call<Manifest>, response: Response<Manifest>) {
                 if (response.isSuccessful && response.body() != null) {
                     photoList.addAll(response.body()?.photoManifest?.photos ?: listOf())
-                    dayOnMars = photoList.randomOrNull()?.sol ?: DEFAULT_DAY_ON_MARS
+                    dayOnMars = photoList.randomOrNull()?.dayOnMars ?: DEFAULT_DAY_ON_MARS
                     executeRequest()
                 }
             }
