@@ -1,0 +1,13 @@
+<resources>
+    <string-array name="settings_list_themes">
+        <item>Выключена</item>
+        <item>Включена</item>
+        <item>Системная</item>
+    </string-array>
+
+    <string-array name="themes_values">
+        <item>themeLight</item>
+        <item>themeNight</item>
+        <item>themeSystem</item>
+    </string-array>
+</resources>

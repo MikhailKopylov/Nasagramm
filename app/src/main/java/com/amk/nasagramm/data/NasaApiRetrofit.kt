@@ -1,4 +1,4 @@
-package com.amk.nasagramm.core
+package com.amk.nasagramm.data
 
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -24,5 +24,4 @@ class NasaApiRetrofit {
         client.addInterceptor(logger)
         return client.build()
     }
-
 }

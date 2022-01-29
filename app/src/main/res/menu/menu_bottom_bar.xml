@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/app_bar_fav"
-        android:icon="@drawable/ic_baseline_favorite_24"
-        android:title="@string/favourite"
+        android:id="@+id/app_bar_home"
+        android:icon="@drawable/photos_day"
+        android:title="@string/day_photo"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/app_bar_search"
+        android:id="@+id/app_bar_fav"
+        android:icon="@drawable/mars"
+        android:title="@string/mars"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/app_bar_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom" />

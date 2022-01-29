@@ -4,19 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.amk.nasagramm.BuildConfig
-import com.amk.nasagramm.core.NasaApiRetrofit
-import com.amk.nasagramm.core.NasaResponse
-import com.amk.nasagramm.core.ResponseResult
+import com.amk.nasagramm.data.NasaApiRetrofit
+import com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse
+import com.amk.nasagramm.domain.DailyImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DailyImageViewModel(
-    private val liveDataForView: MutableLiveData<ResponseResult> = MutableLiveData(),
+    private val liveDataForView: MutableLiveData<DailyImage> = MutableLiveData(),
     private val retrofitImpl: NasaApiRetrofit = NasaApiRetrofit(),
 ) : ViewModel() {
 
-    fun getImageData(): LiveData<ResponseResult> {
+    fun getImageData(): LiveData<DailyImage> {
         sendServerRequest()
         return liveDataForView
     }
@@ -26,40 +26,42 @@ class DailyImageViewModel(
     }
 
     private fun sendServerRequest() {
-        liveDataForView.value = ResponseResult.LoadingStopped
+        liveDataForView.value = DailyImage.LoadingStopped
 
         val apiKey = BuildConfig.NASA_API_KEY
         if (apiKey.isBlank()) {
-            ResponseResult.Error(Throwable("We need your api key"))
+            DailyImage.Error(Throwable("We need your api key"))
         } else {
             executeImageRequest(apiKey)
         }
     }
 
     private fun executeImageRequest(apiKey: String) {
-        val callBack = object : Callback<NasaResponse> {
-            override fun onResponse(call: Call<NasaResponse>, response: Response<NasaResponse>) {
-                handleImageResponse(response)
+        val callBack = object : Callback<DailyImageResponse> {
+            override fun onResponse(
+                call: Call<DailyImageResponse>,
+                dailyImageResponse: Response<DailyImageResponse>,
+            ) {
+                handleImageResponse(dailyImageResponse)
             }
 
-            override fun onFailure(call: Call<NasaResponse>, t: Throwable) {
-                liveDataForView.value = ResponseResult.Error(t)
+            override fun onFailure(call: Call<DailyImageResponse>, t: Throwable) {
+                liveDataForView.value = DailyImage.Error(t)
             }
         }
-        retrofitImpl.getNasaService().getImage(apiKey).enqueue(callBack)
+        retrofitImpl.getNasaService().getEveryDayPhoto(apiKey).enqueue(callBack)
     }
 
-    private fun handleImageResponse(response: Response<NasaResponse>) {
-        if (response.isSuccessful && response.body() != null) {
-            liveDataForView.value = ResponseResult.Success(response.body()!!)
+    private fun handleImageResponse(dailyImageResponse: Response<DailyImageResponse>) {
+        if (dailyImageResponse.isSuccessful && dailyImageResponse.body() != null) {
+            liveDataForView.value = DailyImage.Success(dailyImageResponse.body()!!)
             return
         }
-        val message = response.message()
+        val message = dailyImageResponse.message()
         if (message.isNullOrEmpty()) {
-            liveDataForView.value = ResponseResult.Error(Throwable("Unidentified error"))
+            liveDataForView.value = DailyImage.Error(Throwable("Unidentified error"))
         } else {
-            liveDataForView.value = ResponseResult.Error(Throwable(message))
+            liveDataForView.value = DailyImage.Error(Throwable(message))
         }
-
     }
 }

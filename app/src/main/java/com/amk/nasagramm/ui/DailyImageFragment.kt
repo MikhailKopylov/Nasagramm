@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.api.load
 import com.amk.nasagramm.R
-import com.amk.nasagramm.core.ResponseResult
+import com.amk.nasagramm.data.everyDayPhoto.DailyImageResponse
+import com.amk.nasagramm.domain.DailyImage
 import com.amk.nasagramm.presenter.DailyImageViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -31,11 +30,11 @@ class DailyImageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getImageData().observe(this, {
-            renderData(it)
+        viewModel.getImageData().observe(this, { dailyImage ->
+            renderData(dailyImage)
         })
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+        arguments?.let { bundle ->
+            param1 = bundle.getString(ARG_PARAM1)
         }
     }
 
@@ -56,32 +55,35 @@ class DailyImageFragment : Fragment() {
             viewModel.updateData()
         }
         setBottomSheetBehavior(view.findViewById(R.id.description_bottom_sheet))
-        setBottomAppBar(view)
     }
 
-    private fun renderData(responseResult: ResponseResult) {
-        when (responseResult) {
-            is ResponseResult.Success -> {
-                val responseData = responseResult.serviceResponseData
+    private fun renderData(dailyImage: DailyImage) {
+        when (dailyImage) {
+            is DailyImage.Success -> {
+                val responseData = dailyImage.dailyImageResponse
                 val url = if (isHdChip.isChecked) {
                     responseData.hdurl
                 } else {
                     responseData.url
                 }
-                url?.let {
-                    if (it.isNotEmpty()) {
-                        showImage(it)
-                    } else {
-                        dailyImageView.load(R.drawable.ic_no_image)
-                    }
-                } ?: dailyImageView.load(R.drawable.ic_broken_image)
-                responseData.explanation?.let { descriptionTextView.text = it }
-                responseData.title?.let { titleTextView.text = it }
+                loadImage(url, responseData)
             }
-            is ResponseResult.LoadingInProgress -> {}//TODO()
-            is ResponseResult.Error -> {}//TODO()
-            is ResponseResult.LoadingStopped -> {}//TODO()
+            is DailyImage.LoadingInProgress -> {}//TODO()
+            is DailyImage.Error -> {}//TODO()
+            is DailyImage.LoadingStopped -> {}//TODO()
         }
+    }
+
+    private fun loadImage(url: String?, responseData: DailyImageResponse) {
+        url?.let { url ->
+            if (url.isNotEmpty()) {
+                showImage(url)
+            } else {
+                dailyImageView.load(R.drawable.ic_no_image)
+            }
+        } ?: dailyImageView.load(R.drawable.ic_broken_image)
+        responseData.explanation?.let { descriptionTextView.text = it }
+        responseData.title?.let { titleTextView.text = it }
     }
 
     private fun showImage(url: String) {
@@ -95,25 +97,6 @@ class DailyImageFragment : Fragment() {
     private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_bottom_bar, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.app_bar_fav -> Toast.makeText(context, "Favourite", Toast.LENGTH_SHORT).show()
-            R.id.app_bar_search -> Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun setBottomAppBar(view: View) {
-        val context = requireContext() as AppCompatActivity
-        context.setSupportActionBar(view.findViewById(R.id.bottom_app_bar))
-        setHasOptionsMenu(true)
     }
 }
 
