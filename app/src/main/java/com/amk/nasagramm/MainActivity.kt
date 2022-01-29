@@ -2,10 +2,9 @@ package com.amk.nasagramm
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.commit
-import com.amk.nasagramm.ui.DailyImageFragment
-import com.amk.nasagramm.ui.FactoryFragment
-import com.amk.nasagramm.ui.FragmentType
+import com.amk.nasagramm.ui.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -19,6 +18,12 @@ class MainActivity : AppCompatActivity() {
                 setReorderingAllowed(true)
                 add(R.id.fragment_container, DailyImageFragment())
             }
+        }
+
+        when (SettingManager(this).getTheme()) {
+            Theme.Day -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            Theme.Night -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            Theme.System -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
 
         val bottomNavView = findViewById<BottomNavigationView>(R.id.bottom_app_bar)
